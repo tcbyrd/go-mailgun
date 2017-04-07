@@ -2,7 +2,7 @@
     "ImportPath": "github.com/tcbyrd/go-mailgun",
     "GoVersion": "go1.8",
     "Packages": [
-        "./..."
+        "./...",
         "gopkg.in/mailgun/mailgun-go.v1"
     ]
 }
