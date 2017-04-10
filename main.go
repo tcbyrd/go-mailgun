@@ -18,9 +18,9 @@ func mailer(w http.ResponseWriter, r *http.Request) {
 		http.NotFound(w, r)
 		return
 	}
-	APIKey := "key-ee1103e4605570723f7b6287dd1391d8"
-	publicAPIKey := "pubkey-9fab2901bde6e9be903a0618e533dfef"
-	domain := "app015fce21413f416191c94899f21ea43c.mailgun.org"
+	APIKey := os.Getenv("MAILGUN_API_KEY")
+	publicAPIKey := os.Getenv("MAILGUN_PUBLIC_KEY")
+	domain := os.Getenv("MAILGUN_DOMAIN")
 	mg := mailgun.NewMailgun(domain, APIKey, publicAPIKey)
 	email := r.FormValue("email")
 	msgSubject := r.FormValue("msg_subject")
