@@ -33,7 +33,10 @@ func mailer(w http.ResponseWriter, r *http.Request) {
 	resp, id, err := mg.Send(message)
 	if err != nil {
 		log.Println(err)
-		log.Printf("Message contents: \nEmail: %s\nSubject: %s\nText: %s\n", email, msgSubject, msgText)
+		log.Printf("Message contents: \n")
+		log.Printf("Email: %s\n", email)
+		log.Printf("Subject: %s\n", msgSubject)
+		log.Printf("Text: %s\n", msgText)
 		fmt.Fprint(w, "Message was invalid")
 		return
 	}
