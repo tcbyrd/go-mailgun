@@ -10,26 +10,52 @@ import (
 )
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello from http server!")
+	http.NotFound(w, r)
 }
 
 func mailer(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "POST" {
+		http.NotFound(w, r)
+		return
+	}
 	APIKey := "key-ee1103e4605570723f7b6287dd1391d8"
 	publicAPIKey := "pubkey-9fab2901bde6e9be903a0618e533dfef"
 	domain := "app015fce21413f416191c94899f21ea43c.mailgun.org"
 	mg := mailgun.NewMailgun(domain, APIKey, publicAPIKey)
-
+	email := r.FormValue("email")
+	msgSubject := r.FormValue("msg_subject")
+	msgText := r.FormValue("message")
 	message := mailgun.NewMessage(
-		"sender@example.com",
-		"Fancy subject!",
-		"Hello from Mailgun Go!",
+		email,
+		msgSubject,
+		msgText,
 		"thomascbyrd@gmail.com")
 	resp, id, err := mg.Send(message)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		log.Printf("Message contents: \nEmail: %s\nSubject: %s\nText: %s\n", email, msgSubject, msgText)
+		fmt.Fprint(w, "Message was invalid")
+		return
 	}
 	fmt.Fprintf(w, "ID: %s Resp: %s\n", id, resp)
 }
+
+// func tester(w http.ResponseWriter, r *http.Request) {
+// 	dump, err := httputil.DumpRequest(r, true)
+// 	if err != nil {
+// 		http.Error(w, fmt.Sprint(err), http.StatusInternalServerError)
+// 		return
+// 	}
+// 	fmt.Fprintf(w, "%q", dump)
+// 	name := r.FormValue("name")
+// 	email := r.FormValue("email")
+// 	msgSubject := r.FormValue("msg_subject")
+// 	message := r.FormValue("message")
+// 	fmt.Fprintf(w, "Name: %s", name)
+// 	fmt.Fprintf(w, "Email: %s", email)
+// 	fmt.Fprintf(w, "Subject: %s", msgSubject)
+// 	fmt.Fprintf(w, "message: %s", message)
+// }
 
 func main() {
 	port := os.Getenv("PORT")
