@@ -29,7 +29,7 @@ func mailer(w http.ResponseWriter, r *http.Request) {
 		email,
 		msgSubject,
 		msgText,
-		"thomascbyrd+test@gmail.com")
+		"MAILGUN_TO_EMAIL")
 	resp, id, err := mg.Send(message)
 	if err != nil {
 		log.Println(err)
