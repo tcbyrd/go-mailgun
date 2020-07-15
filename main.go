@@ -21,6 +21,7 @@ func mailer(w http.ResponseWriter, r *http.Request) {
 	APIKey := os.Getenv("MAILGUN_API_KEY")
 	publicAPIKey := os.Getenv("MAILGUN_PUBLIC_KEY")
 	domain := os.Getenv("MAILGUN_DOMAIN")
+	email := os.Getenv("MAILGUN_TO_EMAIL")
 	mg := mailgun.NewMailgun(domain, APIKey, publicAPIKey)
 	email := r.FormValue("email")
 	msgSubject := r.FormValue("msg_subject")
@@ -29,7 +30,7 @@ func mailer(w http.ResponseWriter, r *http.Request) {
 		email,
 		msgSubject,
 		msgText,
-		"MAILGUN_TO_EMAIL")
+		email)
 	resp, id, err := mg.Send(message)
 	if err != nil {
 		log.Println(err)
